@@ -17,8 +17,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('theodo_evolution_session');
+        $treeBuilder = new TreeBuilder('theodo_evolution_session');
+	if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('theodo_evolution_session');
+        }
+
 
         $rootNode
             ->children()
@@ -35,3 +41,4 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 }
+
